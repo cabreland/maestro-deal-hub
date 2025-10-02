@@ -269,29 +269,17 @@ export const DealWizard: React.FC<DealWizardProps> = ({
       // Create associated company record with full details
       const { error: companyError } = await supabase
         .from('companies')
-        .insert({
+        .insert([{
           name: formData.company_name,
           industry: formData.industry,
           location: formData.location,
-          summary: formData.description,
+          description: formData.description,
           revenue: formData.revenue,
           ebitda: formData.ebitda,
           asking_price: formData.asking_price,
-          owner_id: user.id,
-          is_draft: formData.status === 'draft',
-            teaser_payload: {
-              growth_opportunities: formData.growth_opportunities,
-              market_position: formData.market_position,
-              competitive_advantages: formData.competitive_advantages,
-              strategic_fit: formData.strategic_fit,
-              founders_message: formData.founders_message,
-              team_size: formData.team_size,
-              key_personnel: formData.key_personnel,
-              management_experience: formData.management_experience,
-              profit_margin: formData.profit_margin,
-              growth_rate: formData.growth_rate
-            }
-        });
+          created_by: user.id,
+          is_published: formData.status !== 'draft'
+        }]);
 
       if (companyError) {
         console.warn('Company creation failed:', companyError);

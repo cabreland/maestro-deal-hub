@@ -26,12 +26,13 @@ export const useNDA = (companyId?: string) => {
       
       if (error) throw error;
       
-      // Handle different possible value types from Supabase Json type
-      if (data?.value) {
-        if (typeof data.value === 'boolean') {
-          setRequireNDA(data.value);
-        } else if (typeof data.value === 'object' && data.value !== null) {
-          setRequireNDA((data.value as any).require_nda ?? true);
+      // Value is stored as JSONB, could be boolean or string
+      if (data?.value !== undefined && data?.value !== null) {
+        const value = data.value;
+        if (typeof value === 'boolean') {
+          setRequireNDA(value);
+        } else if (typeof value === 'string') {
+          setRequireNDA(value === 'true');
         } else {
           setRequireNDA(true);
         }
@@ -40,7 +41,7 @@ export const useNDA = (companyId?: string) => {
       }
     } catch (error) {
       console.error('Error fetching NDA requirement:', error);
-      setRequireNDA(true); // Default to requiring NDA
+      setRequireNDA(true);
     }
   };
 
@@ -70,24 +71,27 @@ export const useNDA = (companyId?: string) => {
     
     setAccepting(true);
     try {
-      const { data, error } = await supabase.rpc('accept_company_nda', {
-        p_company_id: companyId
-      });
+      const { data: user } = await supabase.auth.getUser();
+      if (!user.user) throw new Error('User not authenticated');
+
+      // Insert NDA acceptance directly
+      const { error } = await supabase
+        .from('company_nda_acceptances')
+        .insert({
+          user_id: user.user.id,
+          company_id: companyId,
+          signature_data: 'accepted',
+          ip_address: null
+        });
       
       if (error) throw error;
       
-      const result = data as { success: boolean; error?: string; message?: string };
-      
-      if (result.success) {
-        setHasAcceptedNDA(true);
-        toast({
-          title: "Success",
-          description: result.message || "NDA accepted successfully",
-        });
-        return true;
-      } else {
-        throw new Error(result.error || 'Failed to accept NDA');
-      }
+      setHasAcceptedNDA(true);
+      toast({
+        title: "Success",
+        description: "NDA accepted successfully",
+      });
+      return true;
     } catch (error) {
       console.error('Error accepting NDA:', error);
       toast({

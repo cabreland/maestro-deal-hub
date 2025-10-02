@@ -97,38 +97,91 @@ export type Database = {
           },
         ]
       }
+      company_nda_acceptances: {
+        Row: {
+          accepted_at: string
+          company_id: string
+          id: string
+          ip_address: string | null
+          signature_data: string | null
+          user_id: string
+        }
+        Insert: {
+          accepted_at?: string
+          company_id: string
+          id?: string
+          ip_address?: string | null
+          signature_data?: string | null
+          user_id: string
+        }
+        Update: {
+          accepted_at?: string
+          company_id?: string
+          id?: string
+          ip_address?: string | null
+          signature_data?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "company_nda_acceptances_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       deals: {
         Row: {
+          asking_price: string | null
           company_id: string
           company_name: string | null
           created_at: string
           created_by: string | null
+          description: string | null
+          ebitda: string | null
           id: string
+          industry: string | null
+          location: string | null
           priority: string | null
+          revenue: string | null
           stage: string | null
           status: string
           title: string
           updated_at: string
         }
         Insert: {
+          asking_price?: string | null
           company_id: string
           company_name?: string | null
           created_at?: string
           created_by?: string | null
+          description?: string | null
+          ebitda?: string | null
           id?: string
+          industry?: string | null
+          location?: string | null
           priority?: string | null
+          revenue?: string | null
           stage?: string | null
           status?: string
           title: string
           updated_at?: string
         }
         Update: {
+          asking_price?: string | null
           company_id?: string
           company_name?: string | null
           created_at?: string
           created_by?: string | null
+          description?: string | null
+          ebitda?: string | null
           id?: string
+          industry?: string | null
+          location?: string | null
           priority?: string | null
+          revenue?: string | null
           stage?: string | null
           status?: string
           title?: string
@@ -406,6 +459,24 @@ export type Database = {
           ip_address?: string | null
           user_agent?: string | null
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      settings: {
+        Row: {
+          key: string
+          updated_at: string
+          value: Json
+        }
+        Insert: {
+          key: string
+          updated_at?: string
+          value: Json
+        }
+        Update: {
+          key?: string
+          updated_at?: string
+          value?: Json
         }
         Relationships: []
       }

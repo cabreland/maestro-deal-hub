@@ -27,10 +27,9 @@ export const usePipelineStats = () => {
     try {
       setLoading(true);
       
-      // Query deals data only for clean pipeline analytics
       let query = supabase
         .from('deals')
-        .select('status, asking_price, revenue, ebitda, created_at');
+        .select('status, asking_price, revenue, ebitda');
       
       if (profile?.role !== 'admin') {
         query = query.eq('created_by', user?.id);

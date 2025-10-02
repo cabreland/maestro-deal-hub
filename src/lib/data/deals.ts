@@ -35,7 +35,7 @@ export const createDealFromCompany = async (companyId: string, dealTitle?: strin
       title: dealTitle || `${company.name} - Investment Opportunity`,
       company_name: company.name,
       company_id: companyId,
-      description: company.summary,
+      description: company.description || company.summary || '',
       industry: company.industry,
       revenue: company.revenue,
       ebitda: company.ebitda,

@@ -38,15 +38,12 @@ export const useNDAStats = () => {
     try {
       setLoading(true);
 
-      // For now, we'll fetch from company_nda_acceptances and calculate stats
-      // In the future, you might want to add expiration logic
       let query = supabase
         .from('company_nda_acceptances')
         .select(`
           id,
           accepted_at,
-          company_id,
-          companies!inner(name)
+          company_id
         `)
         .order('accepted_at', { ascending: false });
 
@@ -76,10 +73,10 @@ export const useNDAStats = () => {
       // Format recent activity
       const activity: NDAActivity[] = (ndaData || []).slice(0, 5).map(nda => ({
         id: nda.id,
-        company_name: (nda.companies as any)?.name || 'Unknown Company',
+        company_name: 'Company',
         status: 'approved' as const,
         accepted_at: nda.accepted_at,
-        user_name: 'User' // You could join with profiles to get actual names
+        user_name: 'User'
       }));
 
       setRecentActivity(activity);
