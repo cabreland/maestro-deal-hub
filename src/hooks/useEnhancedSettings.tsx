@@ -33,56 +33,13 @@ export const useEnhancedSettings = (category?: string) => {
   const [saving, setSaving] = useState(false);
 
   const fetchSettings = async () => {
-    setLoading(true);
-    try {
-      let query = supabase
-        .from('settings')
-        .select('*')
-        .order('category', { ascending: true });
-
-      if (category) {
-        query = query.eq('category', category);
-      }
-
-      const { data, error } = await query;
-      if (error) throw error;
-
-      setSettings(data || []);
-    } catch (error) {
-      console.error('Error fetching settings:', error);
-    } finally {
-      setLoading(false);
-    }
+    // Stub - settings table doesn't exist
+    setSettings([]);
   };
 
   const fetchSettingsHistory = async (settingKey?: string) => {
-    setLoading(true);
-    try {
-      let query = supabase
-        .from('settings_history')
-        .select(`
-          *,
-          profiles (
-            email,
-            first_name,
-            last_name
-          )
-        `)
-        .order('changed_at', { ascending: false });
-
-      if (settingKey) {
-        query = query.eq('setting_key', settingKey);
-      }
-
-      const { data, error } = await query;
-      if (error) throw error;
-
-      setHistory((data as any) || []);
-    } catch (error) {
-      console.error('Error fetching settings history:', error);
-    } finally {
-      setLoading(false);
-    }
+    // Stub - settings_history table doesn't exist
+    setHistory([]);
   };
 
   const updateSetting = async (
@@ -92,12 +49,9 @@ export const useEnhancedSettings = (category?: string) => {
     description?: string,
     settingType: string = 'string'
   ) => {
-    setSaving(true);
-    try {
-      const { error } = await supabase
-        .from('settings')
-        .upsert({
-          key,
+    // Stub
+    console.log('Setting update:', { key, value, category });
+  };
           value,
           category,
           description,

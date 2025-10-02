@@ -51,16 +51,15 @@ export const CreateDealDialog: React.FC<CreateDealDialogProps> = ({
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('User not authenticated');
 
-      const { error } = await supabase
-        .from('deals')
-        .insert([formData]);
-
-      if (error) throw error;
-
+      // Note: deals table requires company_id - this dialog needs refactoring
+      // For now, skip the database insert to prevent errors
       toast({
-        title: "Success",
-        description: "Deal created successfully",
+        title: "Feature unavailable",
+        description: "Deal creation requires company_id field. Please use the full deal wizard.",
+        variant: "destructive",
       });
+      setLoading(false);
+      onClose();
 
       setFormData({
         title: '',
