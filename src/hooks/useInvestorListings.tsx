@@ -51,16 +51,49 @@ export const useInvestorListings = (userRole: string) => {
           .order('updated_at', { ascending: false });
 
         if (error) throw error;
-        setItems(data || []);
+        
+        // Map to ListingItem format
+        const mappedItems: ListingItem[] = (data || []).map(company => ({
+          id: company.id,
+          name: company.name || '',
+          industry: company.industry,
+          location: company.location,
+          summary: company.description,
+          revenue: company.revenue?.toString(),
+          ebitda: company.ebitda?.toString(),
+          asking_price: company.asking_price?.toString(),
+          is_published: company.is_published,
+          created_at: company.created_at,
+          publish_at: company.publish_at || undefined
+        }));
+        
+        setItems(mappedItems);
       } else {
-        // Investors see only published teasers
+        // Investors see only published companies
         const { data, error } = await supabase
-          .from('public_company_teasers')
+          .from('companies')
           .select('*')
-          .order('updated_at', { ascending: false });
+          .eq('is_published', true)
+          .order('created_at', { ascending: false });
 
         if (error) throw error;
-        setItems(data || []);
+        
+        // Map to ListingItem format
+        const mappedItems: ListingItem[] = (data || []).map(company => ({
+          id: company.id,
+          name: company.name || '',
+          industry: company.industry,
+          location: company.location,
+          summary: company.description,
+          revenue: company.revenue?.toString(),
+          ebitda: company.ebitda?.toString(),
+          asking_price: company.asking_price?.toString(),
+          is_published: company.is_published,
+          created_at: company.created_at,
+          publish_at: company.publish_at || undefined
+        }));
+        
+        setItems(mappedItems);
       }
     } catch (err: any) {
       console.error('Error fetching listings:', err);

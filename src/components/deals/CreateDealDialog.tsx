@@ -59,7 +59,7 @@ export const CreateDealDialog: React.FC<CreateDealDialogProps> = ({
         variant: "destructive",
       });
       setLoading(false);
-      onClose();
+      onOpenChange(false);
 
       setFormData({
         title: '',

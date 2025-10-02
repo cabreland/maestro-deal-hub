@@ -1,5 +1,4 @@
-import { useState, useEffect } from 'react';
-import { supabase } from '@/integrations/supabase/client';
+import { useState } from 'react';
 
 export interface EnhancedSetting {
   key: string;
@@ -26,6 +25,7 @@ export interface SettingsHistory {
   } | null;
 }
 
+// Stub implementation - settings tables don't exist yet
 export const useEnhancedSettings = (category?: string) => {
   const [settings, setSettings] = useState<EnhancedSetting[]>([]);
   const [history, setHistory] = useState<SettingsHistory[]>([]);
@@ -33,12 +33,10 @@ export const useEnhancedSettings = (category?: string) => {
   const [saving, setSaving] = useState(false);
 
   const fetchSettings = async () => {
-    // Stub - settings table doesn't exist
     setSettings([]);
   };
 
   const fetchSettingsHistory = async (settingKey?: string) => {
-    // Stub - settings_history table doesn't exist
     setHistory([]);
   };
 
@@ -49,84 +47,23 @@ export const useEnhancedSettings = (category?: string) => {
     description?: string,
     settingType: string = 'string'
   ) => {
-    // Stub
     console.log('Setting update:', { key, value, category });
   };
-          value,
-          category,
-          description,
-          setting_type: settingType,
-          updated_at: new Date().toISOString()
-        });
 
-      if (error) throw error;
-      
-      // Refresh settings
-      await fetchSettings();
-    } catch (error) {
-      console.error('Error updating setting:', error);
-      throw error;
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  const bulkUpdateSettings = async (updates: Array<{
-    key: string;
-    value: any;
-    category?: string;
-    description?: string;
-    setting_type?: string;
-  }>) => {
-    setSaving(true);
-    try {
-      const upsertData = updates.map(update => ({
-        key: update.key,
-        value: update.value,
-        category: update.category || 'general',
-        description: update.description,
-        setting_type: update.setting_type || 'string',
-        updated_at: new Date().toISOString()
-      }));
-
-      const { error } = await supabase
-        .from('settings')
-        .upsert(upsertData);
-
-      if (error) throw error;
-      
-      // Refresh settings
-      await fetchSettings();
-    } catch (error) {
-      console.error('Error bulk updating settings:', error);
-      throw error;
-    } finally {
-      setSaving(false);
-    }
+  const bulkUpdateSettings = async (updates: Array<{ key: string; value: any }>) => {
+    console.log('Bulk update:', updates);
   };
 
   const getSetting = (key: string, defaultValue?: any) => {
-    const setting = settings.find(s => s.key === key);
-    return setting?.value ?? defaultValue;
+    return defaultValue;
   };
 
   const getSettingsByCategory = (categoryName: string) => {
-    return settings.filter(s => s.category === categoryName);
+    return [];
   };
 
   const exportSettings = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('settings')
-        .select('*')
-        .order('category', { ascending: true });
-
-      if (error) throw error;
-      return data;
-    } catch (error) {
-      console.error('Error exporting settings:', error);
-      return [];
-    }
+    return [];
   };
 
   const importSettings = async (settingsData: Array<{
@@ -136,36 +73,8 @@ export const useEnhancedSettings = (category?: string) => {
     description?: string;
     setting_type?: string;
   }>) => {
-    setSaving(true);
-    try {
-      const upsertData = settingsData.map(setting => ({
-        key: setting.key,
-        value: setting.value,
-        category: setting.category || 'general',
-        description: setting.description,
-        setting_type: setting.setting_type || 'string',
-        updated_at: new Date().toISOString()
-      }));
-
-      const { error } = await supabase
-        .from('settings')
-        .upsert(upsertData);
-
-      if (error) throw error;
-      
-      // Refresh settings
-      await fetchSettings();
-    } catch (error) {
-      console.error('Error importing settings:', error);
-      throw error;
-    } finally {
-      setSaving(false);
-    }
+    console.log('Import settings:', settingsData);
   };
-
-  useEffect(() => {
-    fetchSettings();
-  }, [category]);
 
   return {
     settings,

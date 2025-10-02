@@ -72,19 +72,19 @@ export const InvestorContextProvider = ({ children }: InvestorContextProviderPro
       // Get investor info from invitation
       const { data: invitation } = await supabase
         .from('investor_invitations')
-        .select('investor_name, company_name, accepted_at')
-        .eq('email', user.email)
+        .select('investor_name, company_name, access_granted_at')
+        .eq('investor_email', user.email)
         .eq('status', 'accepted')
-        .order('accepted_at', { ascending: false })
+        .order('access_granted_at', { ascending: false })
         .limit(1)
-        .single();
+        .maybeSingle();
 
       // Set investor info
       setInvestorInfo({
-        name: invitation?.investor_name || profile.first_name + ' ' + profile.last_name || 'Investor',
+        name: invitation?.investor_name || (profile.first_name || '') + ' ' + (profile.last_name || '') || 'Investor',
         email: user.email,
         company: invitation?.company_name,
-        lastActivity: invitation?.accepted_at
+        lastActivity: invitation?.access_granted_at
       });
 
       // Calculate metrics
