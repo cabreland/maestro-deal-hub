@@ -116,11 +116,8 @@ export const getCompany = async (id: string): Promise<CompanyData | null> => {
       ...data,
       summary: data.description,
       highlights: [],
-      risks: [],
-      revenue: data.revenue || '',
-      ebitda: data.ebitda || '',
-      asking_price: data.asking_price || ''
-    };
+      risks: []
+    } as CompanyData;
   } catch (error) {
     console.error('Error fetching company:', error);
     return null;
@@ -149,11 +146,8 @@ export const getCompanies = async (query?: string): Promise<CompanyData[]> => {
       ...company,
       summary: company.description,
       highlights: [],
-      risks: [],
-      revenue: company.revenue || '',
-      ebitda: company.ebitda || '',
-      asking_price: company.asking_price || ''
-    }));
+      risks: []
+    } as CompanyData));
   } catch (error) {
     console.error('Error fetching companies:', error);
     return [];

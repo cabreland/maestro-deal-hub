@@ -35,7 +35,7 @@ export const createDealFromCompany = async (companyId: string, dealTitle?: strin
       title: dealTitle || `${company.name} - Investment Opportunity`,
       company_name: company.name,
       company_id: companyId,
-      description: company.description || company.summary || '',
+      description: company.description || '',
       industry: company.industry,
       revenue: company.revenue,
       ebitda: company.ebitda,
@@ -46,7 +46,7 @@ export const createDealFromCompany = async (companyId: string, dealTitle?: strin
 
     const { data: newDeal, error } = await supabase
       .from('deals')
-      .insert(dealData)
+      .insert([dealData])
       .select('id')
       .single();
 
@@ -67,7 +67,7 @@ export const getDealByCompanyId = async (companyId: string): Promise<DealData | 
       .single();
 
     if (error) return null;
-    return data;
+    return data as DealData;
   } catch (error) {
     console.error('Error fetching deal by company ID:', error);
     return null;

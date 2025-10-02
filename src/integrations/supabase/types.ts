@@ -16,46 +16,49 @@ export type Database = {
     Tables: {
       companies: {
         Row: {
-          asking_price: number | null
+          asking_price: string | null
           created_at: string
           created_by: string | null
           description: string | null
-          ebitda: number | null
+          ebitda: string | null
           id: string
           industry: string | null
           is_published: boolean | null
           location: string | null
           name: string
           publish_at: string | null
-          revenue: number | null
+          revenue: string | null
+          updated_at: string | null
         }
         Insert: {
-          asking_price?: number | null
+          asking_price?: string | null
           created_at?: string
           created_by?: string | null
           description?: string | null
-          ebitda?: number | null
+          ebitda?: string | null
           id?: string
           industry?: string | null
           is_published?: boolean | null
           location?: string | null
           name: string
           publish_at?: string | null
-          revenue?: number | null
+          revenue?: string | null
+          updated_at?: string | null
         }
         Update: {
-          asking_price?: number | null
+          asking_price?: string | null
           created_at?: string
           created_by?: string | null
           description?: string | null
-          ebitda?: number | null
+          ebitda?: string | null
           id?: string
           industry?: string | null
           is_published?: boolean | null
           location?: string | null
           name?: string
           publish_at?: string | null
-          revenue?: number | null
+          revenue?: string | null
+          updated_at?: string | null
         }
         Relationships: []
       }
@@ -432,6 +435,45 @@ export type Database = {
         }
         Relationships: []
       }
+      registration_settings: {
+        Row: {
+          category: string
+          created_at: string
+          description: string | null
+          display_name: string
+          id: string
+          setting_key: string
+          setting_type: string
+          setting_value: Json
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          category?: string
+          created_at?: string
+          description?: string | null
+          display_name: string
+          id?: string
+          setting_key: string
+          setting_type?: string
+          setting_value: Json
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          description?: string | null
+          display_name?: string
+          id?: string
+          setting_key?: string
+          setting_type?: string
+          setting_value?: Json
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
       security_audit_log: {
         Row: {
           created_at: string | null
@@ -477,6 +519,36 @@ export type Database = {
           key?: string
           updated_at?: string
           value?: Json
+        }
+        Relationships: []
+      }
+      settings_history: {
+        Row: {
+          change_reason: string | null
+          changed_at: string
+          changed_by: string | null
+          id: string
+          new_value: Json | null
+          old_value: Json | null
+          setting_key: string
+        }
+        Insert: {
+          change_reason?: string | null
+          changed_at?: string
+          changed_by?: string | null
+          id?: string
+          new_value?: Json | null
+          old_value?: Json | null
+          setting_key: string
+        }
+        Update: {
+          change_reason?: string | null
+          changed_at?: string
+          changed_by?: string | null
+          id?: string
+          new_value?: Json | null
+          old_value?: Json | null
+          setting_key?: string
         }
         Relationships: []
       }
