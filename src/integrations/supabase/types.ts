@@ -23,8 +23,10 @@ export type Database = {
           ebitda: number | null
           id: string
           industry: string | null
+          is_published: boolean | null
           location: string | null
           name: string
+          publish_at: string | null
           revenue: number | null
         }
         Insert: {
@@ -35,8 +37,10 @@ export type Database = {
           ebitda?: number | null
           id?: string
           industry?: string | null
+          is_published?: boolean | null
           location?: string | null
           name: string
+          publish_at?: string | null
           revenue?: number | null
         }
         Update: {
@@ -47,8 +51,10 @@ export type Database = {
           ebitda?: number | null
           id?: string
           industry?: string | null
+          is_published?: boolean | null
           location?: string | null
           name?: string
+          publish_at?: string | null
           revenue?: number | null
         }
         Relationships: []
@@ -147,29 +153,62 @@ export type Database = {
       investor_invitations: {
         Row: {
           access_granted_at: string | null
+          access_type: string | null
+          company_name: string | null
           created_at: string
           deal_id: string
+          deal_ids: string | null
+          email: string | null
+          expires_at: string | null
           id: string
           investor_email: string
+          investor_name: string | null
+          invitation_code: string | null
+          invited_at: string | null
           invited_by: string | null
+          master_nda_signed: boolean | null
+          notes: string | null
+          portfolio_access: boolean | null
           status: string
         }
         Insert: {
           access_granted_at?: string | null
+          access_type?: string | null
+          company_name?: string | null
           created_at?: string
           deal_id: string
+          deal_ids?: string | null
+          email?: string | null
+          expires_at?: string | null
           id?: string
           investor_email: string
+          investor_name?: string | null
+          invitation_code?: string | null
+          invited_at?: string | null
           invited_by?: string | null
+          master_nda_signed?: boolean | null
+          notes?: string | null
+          portfolio_access?: boolean | null
           status?: string
         }
         Update: {
           access_granted_at?: string | null
+          access_type?: string | null
+          company_name?: string | null
           created_at?: string
           deal_id?: string
+          deal_ids?: string | null
+          email?: string | null
+          expires_at?: string | null
           id?: string
           investor_email?: string
+          investor_name?: string | null
+          invitation_code?: string | null
+          invited_at?: string | null
           invited_by?: string | null
+          master_nda_signed?: boolean | null
+          notes?: string | null
+          portfolio_access?: boolean | null
           status?: string
         }
         Relationships: [
@@ -186,8 +225,12 @@ export type Database = {
         Row: {
           company_name: string | null
           created_at: string
+          email: string | null
+          first_name: string | null
           full_name: string | null
           id: string
+          last_name: string | null
+          onboarding_completed: boolean | null
           role: Database["public"]["Enums"]["user_role"]
           updated_at: string
           user_id: string
@@ -195,8 +238,12 @@ export type Database = {
         Insert: {
           company_name?: string | null
           created_at?: string
+          email?: string | null
+          first_name?: string | null
           full_name?: string | null
           id?: string
+          last_name?: string | null
+          onboarding_completed?: boolean | null
           role?: Database["public"]["Enums"]["user_role"]
           updated_at?: string
           user_id: string
@@ -204,11 +251,45 @@ export type Database = {
         Update: {
           company_name?: string | null
           created_at?: string
+          email?: string | null
+          first_name?: string | null
           full_name?: string | null
           id?: string
+          last_name?: string | null
+          onboarding_completed?: boolean | null
           role?: Database["public"]["Enums"]["user_role"]
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      security_audit_log: {
+        Row: {
+          created_at: string | null
+          event_data: Json | null
+          event_type: string
+          id: string
+          ip_address: string | null
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          event_data?: Json | null
+          event_type: string
+          id?: string
+          ip_address?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          event_data?: Json | null
+          event_type?: string
+          id?: string
+          ip_address?: string | null
+          user_agent?: string | null
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -230,7 +311,13 @@ export type Database = {
       }
     }
     Enums: {
-      user_role: "super_admin" | "admin" | "broker" | "investor"
+      user_role:
+        | "super_admin"
+        | "admin"
+        | "broker"
+        | "investor"
+        | "editor"
+        | "viewer"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -358,7 +445,14 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      user_role: ["super_admin", "admin", "broker", "investor"],
+      user_role: [
+        "super_admin",
+        "admin",
+        "broker",
+        "investor",
+        "editor",
+        "viewer",
+      ],
     },
   },
 } as const
