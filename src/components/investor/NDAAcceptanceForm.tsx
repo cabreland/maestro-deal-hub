@@ -150,7 +150,8 @@ export const NDAAcceptanceForm: React.FC<NDAAcceptanceFormProps> = ({
       // 5. Accept NDA for the company/deal
       if (companyId) {
         await supabase.rpc('accept_company_nda', {
-          p_company_id: companyId
+          _company_id: companyId,
+          _signature_data: registrationData.signature,
         });
       }
 
@@ -175,13 +176,12 @@ export const NDAAcceptanceForm: React.FC<NDAAcceptanceFormProps> = ({
 
       // 7. Log the successful registration
       await supabase.rpc('log_security_event', {
-        p_event_type: 'investor_registration_completed',
-        p_event_data: {
+        _event_type: 'investor_registration_completed',
+        _event_data: {
           invitation_id: invitation.id,
           access_type: invitation.access_type,
           email: registrationData.email,
         },
-        p_user_id: authData.user.id,
       });
 
       toast({

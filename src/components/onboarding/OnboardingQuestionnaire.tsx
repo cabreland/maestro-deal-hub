@@ -149,7 +149,7 @@ const OnboardingQuestionnaire = () => {
 
       const { error: onboardingError } = await supabase
         .from('onboarding_responses')
-        .upsert(onboardingData);
+        .upsert([onboardingData]);
 
       if (onboardingError) throw onboardingError;
 

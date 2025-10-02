@@ -53,10 +53,7 @@ export const CreateDealDialog: React.FC<CreateDealDialogProps> = ({
 
       const { error } = await supabase
         .from('deals')
-        .insert({
-          ...formData,
-          created_by: user.id
-        });
+        .insert([formData]);
 
       if (error) throw error;
 

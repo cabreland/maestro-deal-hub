@@ -91,7 +91,7 @@ const InvestorInvitationsTable: React.FC<InvestorInvitationsTableProps> = ({ onR
         .order('invited_at', { ascending: false });
 
       if (error) throw error;
-      setInvitations(data || []);
+      setInvitations((data || []) as any);
     } catch (error: any) {
       console.error('Error fetching invitations:', error);
       toast({

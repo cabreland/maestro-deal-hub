@@ -162,6 +162,7 @@ const InvestorInviteDialog: React.FC<InvestorInviteDialogProps> = ({
 
       // Create invitation record
       const insertData = {
+        investor_email: data.email.toLowerCase(),
         email: data.email,
         invitation_code: invitationCode,
         invited_by: profile.user_id,
