@@ -59,6 +59,44 @@ export type Database = {
         }
         Relationships: []
       }
+      company_access: {
+        Row: {
+          access_type: string
+          company_id: string
+          expires_at: string | null
+          granted_at: string | null
+          granted_by: string | null
+          id: string
+          user_id: string
+        }
+        Insert: {
+          access_type?: string
+          company_id: string
+          expires_at?: string | null
+          granted_at?: string | null
+          granted_by?: string | null
+          id?: string
+          user_id: string
+        }
+        Update: {
+          access_type?: string
+          company_id?: string
+          expires_at?: string | null
+          granted_at?: string | null
+          granted_by?: string | null
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "company_access_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       deals: {
         Row: {
           company_id: string
