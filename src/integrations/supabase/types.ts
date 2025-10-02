@@ -62,6 +62,7 @@ export type Database = {
       deals: {
         Row: {
           company_id: string
+          company_name: string | null
           created_at: string
           created_by: string | null
           id: string
@@ -73,6 +74,7 @@ export type Database = {
         }
         Insert: {
           company_id: string
+          company_name?: string | null
           created_at?: string
           created_by?: string | null
           id?: string
@@ -84,6 +86,7 @@ export type Database = {
         }
         Update: {
           company_id?: string
+          company_name?: string | null
           created_at?: string
           created_by?: string | null
           id?: string
@@ -221,6 +224,81 @@ export type Database = {
           },
         ]
       }
+      nda_signatures: {
+        Row: {
+          company_id: string | null
+          created_at: string | null
+          deal_id: string | null
+          id: string
+          ip_address: string | null
+          signature_data: string
+          signed_at: string | null
+          user_id: string
+        }
+        Insert: {
+          company_id?: string | null
+          created_at?: string | null
+          deal_id?: string | null
+          id?: string
+          ip_address?: string | null
+          signature_data: string
+          signed_at?: string | null
+          user_id: string
+        }
+        Update: {
+          company_id?: string | null
+          created_at?: string | null
+          deal_id?: string | null
+          id?: string
+          ip_address?: string | null
+          signature_data?: string
+          signed_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "nda_signatures_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "nda_signatures_deal_id_fkey"
+            columns: ["deal_id"]
+            isOneToOne: false
+            referencedRelation: "deals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      onboarding_responses: {
+        Row: {
+          created_at: string | null
+          id: string
+          response_data: Json
+          step_name: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          response_data: Json
+          step_name: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          response_data?: Json
+          step_name?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           company_name: string | null
@@ -298,6 +376,14 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      accept_company_nda: {
+        Args: {
+          _company_id: string
+          _ip_address?: string
+          _signature_data: string
+        }
+        Returns: string
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["user_role"]
@@ -308,6 +394,15 @@ export type Database = {
       is_admin_or_higher: {
         Args: { _user_id: string }
         Returns: boolean
+      }
+      log_security_event: {
+        Args: {
+          _event_data?: Json
+          _event_type: string
+          _ip_address?: string
+          _user_agent?: string
+        }
+        Returns: string
       }
     }
     Enums: {
