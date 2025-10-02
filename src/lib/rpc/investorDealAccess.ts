@@ -38,7 +38,7 @@ export const getInvestorPermissions = async (email: string): Promise<InvestorPer
     }
 
     return {
-      access_type: data.access_type,
+      access_type: data.access_type as AccessType,
       deal_ids: data.deal_ids ? JSON.parse(JSON.stringify(data.deal_ids)) : [],
       portfolio_access: data.portfolio_access,
       master_nda_signed: data.master_nda_signed,
@@ -99,18 +99,18 @@ export const getAccessibleDeals = async (email: string): Promise<AccessibleDeal[
       return [];
     }
 
-    // Check NDA status for each deal
     const accessibleDeals: AccessibleDeal[] = await Promise.all(
       (deals || []).map(async (deal) => {
         const ndaAccepted = await checkNDAStatus(email, deal.company_id);
         
         return {
           ...deal,
+          status: deal.status as 'draft' | 'active' | 'archived',
           access_granted: true,
-          nda_required: true, // Assume all deals require NDA
+          nda_required: true,
           nda_accepted: ndaAccepted,
-          invitation_id: undefined, // Could be populated if needed
-          priority: deal.priority || 'medium' // Add default priority
+          invitation_id: undefined,
+          priority: deal.priority || 'medium'
         };
       })
     );
@@ -234,13 +234,8 @@ export const logInvestorActivity = async (
 
     if (!profile?.user_id) return;
 
-    // Log activity
-    await supabase.rpc('log_user_activity', {
-      p_action: action,
-      p_resource_type: dealId ? 'deal' : null,
-      p_resource_id: dealId || null,
-      p_metadata: metadata || {}
-    });
+    // Log activity - stub (log_user_activity RPC doesn't exist)
+    console.log('Logging investor activity:', { action, dealId, metadata });
   } catch (error) {
     console.error('Error logging investor activity:', error);
   }

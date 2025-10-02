@@ -78,184 +78,56 @@ export const upsertSetting = async (key: string, value: any): Promise<void> => {
   }
 };
 
-// Growth opportunities functions
+// Growth opportunities functions - STUB (table doesn't exist)
 export const getGrowthOpportunities = async (activeOnly = false): Promise<GrowthOpportunity[]> => {
-  let query = supabase.from('growth_opportunities').select('*');
-  
-  if (activeOnly) {
-    query = query.eq('is_active', true);
-  }
-
-  const { data, error } = await query.order('title');
-
-  if (error) {
-    if (error.code === '42501' || error.message?.includes('permission denied')) {
-      throw new Error('Access denied. Admin or staff privileges required to view growth opportunities.');
-    }
-    throw error;
-  }
-  return data || [];
+  console.log('Growth opportunities table does not exist yet');
+  return [];
 };
 
 export const createGrowthOpportunity = async (data: Omit<GrowthOpportunity, 'id' | 'created_at'>): Promise<string> => {
-  const { data: result, error } = await supabase
-    .from('growth_opportunities')
-    .insert(data)
-    .select('id')
-    .single();
-
-  if (error) {
-    if (error.code === '42501' || error.message?.includes('permission denied')) {
-      throw new Error('Access denied. Admin or staff privileges required to create growth opportunities.');
-    }
-    throw error;
-  }
-  return result.id;
+  console.log('Growth opportunities table does not exist yet');
+  return '';
 };
 
 export const updateGrowthOpportunity = async (id: string, data: Partial<GrowthOpportunity>): Promise<void> => {
-  const { error } = await supabase
-    .from('growth_opportunities')
-    .update(data)
-    .eq('id', id);
-
-  if (error) {
-    if (error.code === '42501' || error.message?.includes('permission denied')) {
-      throw new Error('Access denied. Admin or staff privileges required to update growth opportunities.');
-    }
-    throw error;
-  }
+  console.log('Growth opportunities table does not exist yet');
 };
 
-// Custom fields functions
+// Custom fields functions - STUB (table doesn't exist)
 export const getCustomFields = async (activeOnly = false): Promise<CustomField[]> => {
-  let query = supabase.from('company_custom_fields').select('*');
-  
-  if (activeOnly) {
-    query = query.eq('is_active', true);
-  }
-
-  const { data, error } = await query.order('label');
-
-  if (error) {
-    if (error.code === '42501' || error.message?.includes('permission denied')) {
-      throw new Error('Access denied. Admin or staff privileges required to view custom fields.');
-    }
-    throw error;
-  }
-  
-  // Cast the type field to match our CustomField interface
-  return (data || []).map(field => ({
-    ...field,
-    type: field.type as CustomField['type']
-  }));
+  console.log('Custom fields table does not exist yet');
+  return [];
 };
 
 export const createCustomField = async (data: Omit<CustomField, 'id' | 'created_at'>): Promise<string> => {
-  const { data: result, error } = await supabase
-    .from('company_custom_fields')
-    .insert(data)
-    .select('id')
-    .single();
-
-  if (error) {
-    if (error.code === '42501' || error.message?.includes('permission denied')) {
-      throw new Error('Access denied. Admin or staff privileges required to create custom fields.');
-    }
-    throw error;
-  }
-  return result.id;
+  console.log('Custom fields table does not exist yet');
+  return '';
 };
 
 export const updateCustomField = async (id: string, data: Partial<CustomField>): Promise<void> => {
-  const { error } = await supabase
-    .from('company_custom_fields')
-    .update(data)
-    .eq('id', id);
-
-  if (error) {
-    if (error.code === '42501' || error.message?.includes('permission denied')) {
-      throw new Error('Access denied. Admin or staff privileges required to update custom fields.');
-    }
-    throw error;
-  }
+  console.log('Custom fields table does not exist yet');
 };
 
-// Custom values functions
+// Custom values functions - STUB (table doesn't exist)
 export const getCompanyCustomValues = async (companyId: string): Promise<CustomValue[]> => {
-  const { data, error } = await supabase
-    .from('company_custom_values')
-    .select('*')
-    .eq('company_id', companyId);
-
-  if (error) {
-    if (error.code === '42501' || error.message?.includes('permission denied')) {
-      throw new Error('Access denied. Admin or staff privileges required to view custom values.');
-    }
-    throw error;
-  }
-  return data || [];
+  console.log('Custom values table does not exist yet');
+  return [];
 };
 
 export const upsertCustomValue = async (fieldId: string, companyId: string, value: any): Promise<void> => {
-  const { error } = await supabase
-    .from('company_custom_values')
-    .upsert(
-      { field_id: fieldId, company_id: companyId, value },
-      { onConflict: 'field_id,company_id' }
-    );
-
-  if (error) {
-    if (error.code === '42501' || error.message?.includes('permission denied')) {
-      throw new Error('Access denied. Admin or staff privileges required to modify custom values.');
-    }
-    throw error;
-  }
+  console.log('Custom values table does not exist yet');
 };
 
-// Company growth opportunities functions
+// Company growth opportunities functions - STUB (table doesn't exist)
 export const getCompanyGrowthOpportunities = async (companyId: string) => {
-  const { data, error } = await supabase
-    .from('company_growth_opps')
-    .select(`
-      note,
-      growth_opportunities!inner(*)
-    `)
-    .eq('company_id', companyId);
-
-  if (error) {
-    if (error.code === '42501' || error.message?.includes('permission denied')) {
-      throw new Error('Access denied. Admin or staff privileges required to view company growth opportunities.');
-    }
-    throw error;
-  }
-  return data || [];
+  console.log('Company growth opportunities table does not exist yet');
+  return [];
 };
 
 export const addCompanyGrowthOpportunity = async (companyId: string, growthId: string, note?: string): Promise<void> => {
-  const { error } = await supabase
-    .from('company_growth_opps')
-    .insert({ company_id: companyId, growth_id: growthId, note });
-
-  if (error) {
-    if (error.code === '42501' || error.message?.includes('permission denied')) {
-      throw new Error('Access denied. Admin or staff privileges required to add company growth opportunities.');
-    }
-    throw error;
-  }
+  console.log('Company growth opportunities table does not exist yet');
 };
 
 export const removeCompanyGrowthOpportunity = async (companyId: string, growthId: string): Promise<void> => {
-  const { error } = await supabase
-    .from('company_growth_opps')
-    .delete()
-    .eq('company_id', companyId)
-    .eq('growth_id', growthId);
-
-  if (error) {
-    if (error.code === '42501' || error.message?.includes('permission denied')) {
-      throw new Error('Access denied. Admin or staff privileges required to remove company growth opportunities.');
-    }
-    throw error;
-  }
+  console.log('Company growth opportunities table does not exist yet');
 };

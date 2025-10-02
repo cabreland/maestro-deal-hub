@@ -205,8 +205,8 @@ export const logSecurityEvent = async (eventType: string, eventData?: any) => {
   try {
     const { supabase } = await import('@/integrations/supabase/client');
     await supabase.rpc('log_security_event', {
-      p_event_type: eventType,
-      p_event_data: eventData || null
+      _event_type: eventType,
+      _event_data: eventData || null
     });
   } catch (error) {
     console.error('Failed to log security event:', error);

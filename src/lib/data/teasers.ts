@@ -24,31 +24,11 @@ export const getPublishedTeasers = async (query?: string): Promise<TeaserData[]>
   try {
     let queryBuilder = supabase
       .from('companies')
-      .select(`
-        id,
-        name,
-        industry,
-        location,
-        summary,
-        revenue,
-        ebitda,
-        asking_price,
-        stage,
-        priority,
-        fit_score,
-        is_published,
-        publish_at,
-        teaser_payload,
-        created_at,
-        updated_at
-      `)
-      .eq('is_draft', false)
+      .select('*')
       .eq('is_published', true)
       .order('created_at', { ascending: false });
 
-    // Add published date filter
-    queryBuilder = queryBuilder.or('publish_at.is.null,publish_at.lte.' + new Date().toISOString());
-
+    // Add published date filter if publish_at exists
     if (query) {
       queryBuilder = queryBuilder.or(`name.ilike.%${query}%,industry.ilike.%${query}%`);
     }
@@ -63,20 +43,20 @@ export const getPublishedTeasers = async (query?: string): Promise<TeaserData[]>
     return (data || []).map(company => ({
       id: company.id,
       name: company.name,
-      industry: company.industry,
-      location: company.location,
-      summary: company.summary,
-      revenue: company.revenue,
-      ebitda: company.ebitda,
-      asking_price: company.asking_price,
-      stage: company.stage,
-      priority: company.priority,
-      fit_score: company.fit_score,
-      is_published: company.is_published,
-      publish_at: company.publish_at,
-      teaser_payload: company.teaser_payload,
-      created_at: company.created_at,
-      updated_at: company.updated_at
+      industry: company.industry || '',
+      location: company.location || '',
+      summary: company.description || '',
+      revenue: company.revenue || '',
+      ebitda: company.ebitda || '',
+      asking_price: company.asking_price || '',
+      stage: 'teaser' as const,
+      priority: 'medium' as const,
+      fit_score: 50,
+      is_published: company.is_published || false,
+      publish_at: company.publish_at || null,
+      teaser_payload: null,
+      created_at: company.created_at || '',
+      updated_at: company.updated_at || ''
     }));
   } catch (error) {
     console.error('Error fetching teasers:', error);

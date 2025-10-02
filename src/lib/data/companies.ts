@@ -23,6 +23,31 @@ export interface CompanyData {
   highlights?: string[];
   risks?: string[];
   summary?: string;
+  
+  // Additional extended fields - not in database
+  owner_id?: string;
+  passcode?: string;
+  detailed_description?: string;
+  founded_year?: string;
+  team_size?: string;
+  reason_for_sale?: string;
+  growth_opportunities?: string[];
+  founders_message?: string;
+  founder_name?: string;
+  ideal_buyer_profile?: string;
+  rollup_potential?: string;
+  market_trends?: string;
+  profit_margin?: string;
+  customer_count?: string;
+  recurring_revenue?: string;
+  cac_ltv_ratio?: string;
+  placeholder_documents?: Array<{
+    name: string;
+    type: string;
+    size: string;
+    lastUpdated: string;
+  }>;
+  is_draft?: boolean;
 }
 
 export const upsertCompanyDraft = async (data: Partial<CompanyData>, id?: string): Promise<string> => {
